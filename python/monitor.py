@@ -16,10 +16,10 @@ def run_data_collector():
     
 # Parse data from the bash script output
 def parse_metrics(output):
-    # Parse CPU usage (example: CPU Usage: 75%)
+    # Parse CPU usage
     cpu_usage = int(re.search(r"CPU Usage: (\d+)%", output).group(1))
 
-    # Parse Memory usage (example: Used: 3.5Gi / Total: 8Gi)
+    # Parse Memory usage
     memory_usage = re.search(r"Used: ([\d\.]+)Gi / Total: (\d+)Gi", output)
     memory_used = float(memory_usage.group(1)) if memory_usage else 0.0
     memory_total = int(memory_usage.group(2)) if memory_usage else 0
@@ -27,7 +27,7 @@ def parse_metrics(output):
     # Initialize disk_usage as an empty list
     disk_usage = []
 
-    # Parse Disk usage (example: /dev/sda1: 25G used of 50G (50%))
+    # Parse Disk usage
     for line in output.splitlines():
         if "/dev/" in line:
             match = re.search(r"(/dev/\S+): (\S+) used of (\S+) \((\d+)%\)", line)
@@ -39,7 +39,7 @@ def parse_metrics(output):
                     "percentage": match.group(4),
                 })
 
-    # Parse Uptime (example: up 10 days, 3 hours, 15 minutes)
+    # Parse Uptime
     uptime_match = re.search(r"up (.+)", output)
     uptime = uptime_match.group(1) if uptime_match else "N/A"
 
